@@ -9,32 +9,27 @@ import {
   useMutation,
 } from "convex/react";
 import { api } from "../convex/_generated/api";
+import DocumentCard from "@/components/DocumentCard";
+import { Button } from "@/components/ui/button";
+import DocumentCreateButton from "@/components/DocumentCreateButton";
 
 export default function Home() {
-  const createDocument = useMutation(api.document.createDocument);
 
   const getDocuemnts = useQuery(api.document.getDocuments);
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen">
-      <Unauthenticated>
-        <SignInButton />
-      </Unauthenticated>
-      <Authenticated>
-        <UserButton />
-        <button
-          onClick={() =>
-            createDocument({
-              title: "Asem na Waka",
-            })
-          }
-        >
-          Click to insert
-        </button>
-        {getDocuemnts?.map((item) => {
-          return <p key={item._id}>{item.title}</p>;
+    <main className="p-24">
+      <div className="flex items-center justify-between mb-8">
+        <h1>My Documents</h1>
+
+        <DocumentCreateButton />
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        {getDocuemnts?.map((document) => {
+          return <DocumentCard document={document} />;
         })}
-      </Authenticated>
+      </div>
     </main>
   );
 }
